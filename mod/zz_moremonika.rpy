@@ -50,6 +50,20 @@ init python:
         except Exception:
             pass
 
+    # ---------- story jump helper: set a consistent state before jumping ----------
+    def mod_jump(label, pt, chap, rw=False):
+        persistent.playthrough = pt
+        store.chapter = chap
+        if rw:
+            # act 2/3 context: winners must never be sayori, appeals must point at existing labels
+            store.poemwinner = ["natsuki", "natsuki", "natsuki"]
+            store.s_appeal = 0
+            store.n_appeal = 0
+            store.y_appeal = 0
+            store.m_appeal = 0
+        renpy.save_persistent()
+        renpy.jump(label)
+
     # ---------- F9 panel data ----------
     def mod_affection_data():
         lines = []
@@ -164,17 +178,17 @@ screen mod_jump_menu():
             text "Jump straight to a key scene. Current save may be affected!" style "mod_menu_note"
             grid 2 6:
                 spacing 10
-                textbutton "Intro (day 0)" action Jump("ch0_main") text_style "mod_menu_text"
-                textbutton "Day 1" action Jump("ch1_main") text_style "mod_menu_text"
-                textbutton "Day 2" action Jump("ch2_main") text_style "mod_menu_text"
-                textbutton "Day 3" action Jump("ch3_main") text_style "mod_menu_text"
-                textbutton "Day 4 (Sayori confession)" action Jump("ch4_main") text_style "mod_menu_text"
-                textbutton "Sayori's fate" action Jump("ch10_main") text_style "mod_menu_text"
-                textbutton "Act 2 - Day 1" action Jump("ch20_main") text_style "mod_menu_text"
-                textbutton "Act 2 - Day 2" action Jump("ch21_main") text_style "mod_menu_text"
-                textbutton "Act 2 - Day 3" action Jump("ch22_main") text_style "mod_menu_text"
-                textbutton "Act 2 finale (Yuri)" action Jump("ch23_main") text_style "mod_menu_text"
-                textbutton "Just Monika" action Jump("ch30_main") text_style "mod_menu_text"
+                textbutton "Intro (day 0)" action Function(mod_jump, "ch0_main", 0, 0) text_style "mod_menu_text"
+                textbutton "Day 1" action Function(mod_jump, "ch1_main", 0, 1) text_style "mod_menu_text"
+                textbutton "Day 2" action Function(mod_jump, "ch2_main", 0, 2) text_style "mod_menu_text"
+                textbutton "Day 3" action Function(mod_jump, "ch3_main", 0, 3) text_style "mod_menu_text"
+                textbutton "Day 4 (Sayori confession)" action Function(mod_jump, "ch4_main", 0, 4) text_style "mod_menu_text"
+                textbutton "Sayori's fate" action Function(mod_jump, "ch10_main", 1, 0) text_style "mod_menu_text"
+                textbutton "Act 2 - Day 1" action Function(mod_jump, "ch20_main", 2, 0, True) text_style "mod_menu_text"
+                textbutton "Act 2 - Day 2" action Function(mod_jump, "ch21_main", 2, 1, True) text_style "mod_menu_text"
+                textbutton "Act 2 - Day 3" action Function(mod_jump, "ch22_main", 2, 2, True) text_style "mod_menu_text"
+                textbutton "Act 2 finale (Yuri)" action Function(mod_jump, "ch23_main", 2, 3, True) text_style "mod_menu_text"
+                textbutton "Just Monika" action Function(mod_jump, "ch30_main", 3, 0, True) text_style "mod_menu_text"
                 textbutton "Close (F10)" action Hide("mod_jump_menu") text_style "mod_menu_text"
 
 # ============================================================
