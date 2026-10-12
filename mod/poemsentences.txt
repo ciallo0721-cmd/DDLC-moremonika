@@ -1,0 +1,50 @@
+#File format: sentence,sPoint,nPoint,yPoint
+#Sentence library - do NOT use commas inside sentences
+
+#Sayori
+The sky today is as blue as her smile,3,1,1
+Walking home alone at night is a little scary,3,1,2
+I wish someone was waiting for me at home,3,2,1
+I have been pretending to be strong all along,3,1,2
+Rainy days feel less cold with you here,3,2,1
+Happy things become twice as good when shared,3,2,1
+Please never ever leave me behind,3,2,1
+My sadness melts when I see you wave,3,2,1
+Being listened to is a gentle kind of magic,3,2,1
+Some smiles are umbrellas for other people,3,1,2
+I left my loneliness inside the poem,3,1,2
+A friend's hand is warmer than any glove,3,2,1
+The last bite of breakfast tastes like freedom,2,2,2
+I counted stars until my worries fell asleep,3,2,1
+
+#Natsuki
+Finishing a manga in one sitting is the only way,1,3,1
+Cute things need absolutely no reason to exist,1,3,1
+I made cupcakes and they are NOT for you,1,3,1
+Don't get the wrong idea I just had extra flour,1,3,1
+Cat ears are the supreme form of cuteness,1,3,1
+Compliment me again and I'll pinch you,1,3,2
+A tiny fist can still wake up a big dummy,1,3,1
+I practiced my handwriting all night okay,2,3,1
+Being called cool is my secret weakness,1,3,2
+The rooftop wind turned my uniform into a flag,2,2,2
+The convenience store is where adventures start,2,3,1
+Pouting is a legitimate art form,1,3,1
+I hid the last cupcake where you can't find it,1,3,1
+Wholesome stories deserve wholesome endings,2,3,1
+
+#Yuri
+The tea leaves slowly unfold in the rising steam,1,1,3
+Between the pages sleeps last autumn's ginkgo leaf,1,1,3
+Silence speaks the truth more honestly than words,1,1,3
+The sound of a blade sliding through paper,1,1,3
+At night my soul becomes transparent,1,1,3
+Being pierced by a sentence is a sweet wound,1,1,3
+Her long hair glows violet under the lamp,1,1,3
+An intense gaze can be a confession too,1,1,3
+The deepest corner of the library belongs to me,1,2,3
+Words written in ink can never be erased,1,1,3
+Breathing quietly in the seams of the world,1,1,3
+Passionate feelings need an exquisite container,1,2,3
+I collect ribbons and other delicate things,1,1,3
+The knife glitters when the moon is watching,1,1,3
