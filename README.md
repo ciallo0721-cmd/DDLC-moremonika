@@ -2,6 +2,8 @@
 
 A DDLC mod that upgrades the poem minigame and gives Monika a few extra tricks.
 
+> 简体中文说明见 [README.zh-CN.md](README.zh-CN.md)（含中文版计划说明）。
+
 ## Features
 
 1. **Sentence poem minigame** - instead of picking single words, you pick full sentences (`poemsentences.txt`, 10 picks per round, thresholds rebalanced).
