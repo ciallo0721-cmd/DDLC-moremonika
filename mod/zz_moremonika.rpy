@@ -74,8 +74,21 @@ init python:
             store.n_appeal = 0
             store.y_appeal = 0
             store.m_appeal = 0
+        # restore skipping: ch30 / ch20 / ch23 / poemgame permanently disable it,
+        # vanilla only re-enables on a fresh boot via splashscreen
+        config.skipping = False
+        config.allow_skipping = True
+        store.allow_skipping = True
+        # ch10 glitches s_name into random text; reset it for any other destination
+        # (ch10_main sets it again at its own start, so this is always safe)
+        store.s_name = "Sayori"
+        # ch30_noskip leaves a fake skip indicator on screen
+        renpy.hide_screen("fake_skip_indicator")
         renpy.save_persistent()
-        renpy.jump(label)
+        # go through the dispatcher: it purges the stale call stack and enters
+        # a wrapper label that replays the vanilla continuation correctly
+        store.mod_target = "mod_" + label
+        renpy.jump("mod_jump_dispatch")
 
     # ---------- F9 panel data ----------
     def mod_affection_data():
@@ -388,4 +401,142 @@ label poem(transition=True):
         alpha 0
         linear 1.0 alpha 1.0
     $ pause(1.0)
+    return
+
+
+# =====================================================================
+# Story jump dispatcher + wrappers
+#
+# Problem: jumping straight into a chapter label leaves the old call
+# stack intact, so when the chapter's `return` fires, control resumes
+# at whatever stale return-site was on the stack (e.g. inside the
+# playthrough-1 branch of `start`), and the story derails into
+# act 2 / Just Monika on its own.
+#
+# Fix: purge the whole return stack, then enter a wrapper label that
+# CALLS the chapter and replays the exact vanilla continuation.
+# =====================================================================
+
+label mod_jump_dispatch:
+    python:
+        renpy.block_rollback()
+        while renpy.get_return_stack():
+            renpy.pop_call()
+        renpy.jump(store.mod_target)
+
+# ---------- playthrough 0 (act 1) ----------
+label mod_ch0_main:
+    $ chapter = 0
+    call ch0_main
+    call poem
+    $ chapter = 1
+    call ch1_main
+    jump mod_pt0_after_ch1
+
+label mod_ch1_main:
+    $ chapter = 1
+    call ch1_main
+    jump mod_pt0_after_ch1
+
+label mod_pt0_after_ch1:
+    call poemresponse_start
+    call ch1_end
+    call poem
+    $ chapter = 2
+    call ch2_main
+    jump mod_pt0_after_ch2
+
+label mod_ch2_main:
+    $ chapter = 2
+    call ch2_main
+    jump mod_pt0_after_ch2
+
+label mod_pt0_after_ch2:
+    call poemresponse_start
+    call ch2_end
+    call poem
+    $ chapter = 3
+    call ch3_main
+    jump mod_pt0_after_ch3
+
+label mod_ch3_main:
+    $ chapter = 3
+    call ch3_main
+    jump mod_pt0_after_ch3
+
+label mod_pt0_after_ch3:
+    call poemresponse_start
+    call ch3_end
+    $ chapter = 4
+    call ch4_main
+    jump mod_pt0_after_ch4
+
+label mod_ch4_main:
+    $ chapter = 4
+    call ch4_main
+    jump mod_pt0_after_ch4
+
+label mod_ch5_main:
+    $ chapter = 5
+    call ch5_main
+    jump mod_pt0_after_ch4
+
+label mod_pt0_after_ch4:
+    $ chapter = 5
+    call ch5_main
+    call endgame
+    return
+
+# ---------- playthrough 1 (Sayori's fate) ----------
+label mod_ch10_main:
+    call ch10_main
+    jump playthrough2
+
+# ---------- playthrough 2 (act 2) ----------
+label mod_ch20_main:
+    call ch20_main
+    jump playthrough2
+
+label mod_ch21_main:
+    $ chapter = 1
+    call ch21_main
+    jump mod_pt2_after_ch21
+
+label mod_pt2_after_ch21:
+    call poemresponse_start
+    call ch21_end
+    call poem (False)
+    $ chapter = 2
+    call ch22_main
+    jump mod_pt2_after_ch22
+
+label mod_ch22_main:
+    $ chapter = 2
+    call ch22_main
+    jump mod_pt2_after_ch22
+
+label mod_pt2_after_ch22:
+    call poemresponse_start
+    call ch22_end
+    call poem (False)
+    $ chapter = 3
+    call ch23_main
+    jump mod_pt2_after_ch23
+
+label mod_ch23_main:
+    $ chapter = 3
+    call ch23_main
+    jump mod_pt2_after_ch23
+
+label mod_pt2_after_ch23:
+    if y_appeal >= 3:
+        call poemresponse_start2
+    else:
+        call poemresponse_start
+    call ch23_end
+    return
+
+# ---------- playthrough 3 (Just Monika) ----------
+label mod_ch30_main:
+    call ch30_main
     return
