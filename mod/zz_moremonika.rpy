@@ -79,6 +79,19 @@ init python:
         config.skipping = False
         config.allow_skipping = True
         store.allow_skipping = True
+        # ch30_main permanently mutates Monika's Character: a say callback that
+        # hijacks into ch30_noskip whenever the player skips while Monika talks.
+        # It survives the whole session (m is a defined Character) - undo it.
+        store.m.display_args["callback"] = None
+        store.m.what_args["slow_abortable"] = False
+        style.say_dialogue = style.normal
+        # chapter jumps skip the intro where names get revealed - set them all
+        # (ch0_main handles its own intro names, so leave it alone)
+        if label != "ch0_main":
+            store.s_name = "Sayori"
+            store.n_name = "Natsuki"
+            store.y_name = "Yuri"
+            store.m_name = "Monika"
         # ch10 glitches s_name into random text; reset it for any other destination
         # (ch10_main sets it again at its own start, so this is always safe)
         store.s_name = "Sayori"
