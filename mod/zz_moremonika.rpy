@@ -10,6 +10,12 @@
 
 init python:
 
+    # ---------- defaults for splashscreen globals ----------
+    # vanilla sets these in label splashscreen; when jumping straight into a
+    # late-game label (F10 / autoload) they may not exist yet -> NameError
+    store.process_list = []
+    store.currentuser = ""
+
     # ---------- sentence-mode thresholds (10 sentences instead of 20 words) ----------
     POEM_DISLIKE_THRESHOLD = 15
     POEM_LIKE_THRESHOLD = 22
@@ -54,6 +60,13 @@ init python:
     def mod_jump(label, pt, chap, rw=False):
         persistent.playthrough = pt
         store.chapter = chap
+        # make sure splashscreen globals exist before touching late-game labels
+        if 'process_list' not in globals():
+            store.process_list = []
+        if 'currentuser' not in globals():
+            store.currentuser = ""
+        if 'player' not in globals():
+            store.player = currentuser or "Player"
         if rw:
             # act 2/3 context: winners must never be sayori, appeals must point at existing labels
             store.poemwinner = ["natsuki", "natsuki", "natsuki"]
