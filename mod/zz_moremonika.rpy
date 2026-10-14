@@ -84,6 +84,10 @@ init python:
         store.s_name = "Sayori"
         # ch30_noskip leaves a fake skip indicator on screen
         renpy.hide_screen("fake_skip_indicator")
+        # clear the vanilla "Monika trap": once set (act2 finale / ch30),
+        # every MainMenu click full-restarts into splashscreen, which sees
+        # persistent.autoload and hijacks the game back into ch30
+        persistent.autoload = None
         renpy.save_persistent()
         # go through the dispatcher: it purges the stale call stack and enters
         # a wrapper label that replays the vanilla continuation correctly
